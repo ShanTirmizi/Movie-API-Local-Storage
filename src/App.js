@@ -4,6 +4,7 @@ import './App.css';
 function App() {
   const [apiData, setApiData] = useState([]);
   const [search, setSearch] = useState('');
+  const [fav, setFav] = useState([]);
   const fetchData = async () => {
     const url = 'http://www.omdbapi.com/?s=Batman&page=2&apikey=3b170b7d';
     try {
@@ -20,8 +21,11 @@ function App() {
   const searchHandler = (e) => {
     setSearch(e.target.value);
   };
+  const addToFav = (item) => {
+    setFav([...fav, item]);
+  };
 
-  console.log(search.length);
+  console.log(fav);
   return (
     <div className="App">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -35,6 +39,16 @@ function App() {
           Search
         </button>
       </form>
+      <div>
+        My Favs{' '}
+        {fav.map((val, index) => {
+          return (
+            <div key={index}>
+              <h1>{val.Title}</h1>
+            </div>
+          );
+        })}
+      </div>
       {search.length < 4 ? (
         <h1>The search needs to be longer than three words</h1>
       ) : (
@@ -43,6 +57,7 @@ function App() {
             <div key={index}>
               <h3>{api.Title}</h3>
               <img src={api.Poster} alt={`${api.Title} poster`} />
+              <button onClick={() => addToFav(api)}>Add to Favorites</button>
             </div>
           );
         })
