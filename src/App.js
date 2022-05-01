@@ -1,3 +1,4 @@
+import { queryByDisplayValue } from '@testing-library/react';
 import { useEffect, useState } from 'react';
 import './App.css';
 
@@ -24,6 +25,9 @@ function App() {
   const addToFav = (item) => {
     setFav([...fav, item]);
   };
+  const removeFav = (item) => {
+    setFav(fav.filter((i) => i.imdbID !== item));
+  };
 
   console.log(fav);
   return (
@@ -40,11 +44,12 @@ function App() {
         </button>
       </form>
       <div>
-        My Favs{' '}
+        {fav.length > 0 && 'My Favs'}
         {fav.map((val, index) => {
           return (
-            <div key={index}>
+            <div key={val.imdbID}>
               <h1>{val.Title}</h1>
+              <button onClick={() => removeFav(val.imdbID)}>Remove Fav</button>
             </div>
           );
         })}
@@ -54,7 +59,7 @@ function App() {
       ) : (
         apiData.map((api, index) => {
           return (
-            <div key={index}>
+            <div key={api.imdbID}>
               <h3>{api.Title}</h3>
               <img src={api.Poster} alt={`${api.Title} poster`} />
               <button onClick={() => addToFav(api)}>Add to Favorites</button>
