@@ -19,17 +19,43 @@ function App() {
       console.log('data fetch error', error);
     }
   };
+  const addLocalStorage = (item) => {
+    localStorage.setItem('my-fav', JSON.stringify(item));
+  };
   const searchHandler = (e) => {
     setSearch(e.target.value);
   };
   const addToFav = (item) => {
-    setFav([...fav, item]);
+    const newFavList = [...fav, item];
+    setFav(newFavList);
+    addLocalStorage(newFavList);
   };
   const removeFav = (item) => {
-    setFav(fav.filter((i) => i.imdbID !== item));
+    const removeFavList = fav.filter((i) => i.imdbID !== item);
+    setFav(removeFavList);
+    addLocalStorage(removeFavList);
   };
 
   console.log(fav);
+  useEffect(() => {
+    const data = localStorage.getItem('my-fav');
+    console.log(JSON.parse(data));
+    if (data) {
+      setFav(JSON.parse(data));
+    }
+  }, []);
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem('My-Favs'));
+
+  //   if (data) {
+  //     // console.log(data, 'dataa');
+  //     setFav(data);
+  //     console.log(fav);
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   localStorage.setItem('My-Favs', JSON.stringify(fav));
+  // }, [fav]);
   return (
     <div className="App">
       <form onSubmit={(e) => e.preventDefault()}>
